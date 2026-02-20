@@ -1,0 +1,159 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+
+\title{Agent-Based Simulation of a Financial Market}
+\author{Henry Roeth \\ CPSC 381: Computer Simulation}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	\begin{center}
+		Project Repository:
+		\href{https://github.com/henryroeth/hiramcollege-cpsc381-computersimulation}{https://github.com/henryroeth/hiramcollege-cpsc381-computersimulation}
+	\end{center}
+	\doublespacing
+	
+	\section{Introduction}
+	
+	Financial markets display complex behavior that is difficult to explain using simple mathematical models.
+	Real markets experience bubbles, crashes, and periods of high and low volatility that occur irregularly over time.
+	Traditional predictive approaches attempt to estimate prices directly, but they often fail to explain \textit{why} these behaviors occur.
+	
+	This project proposes building a simulated stock market using an agent-based model.
+	Instead of predicting prices, the simulation will generate prices from the interactions of many individual traders.
+	Each trader follows a simple rule-based strategy, and global market behavior emerges from their combined actions.
+	
+	The goal is to determine whether realistic market patterns can naturally arise from simple trader behaviors.
+	Rather than forecasting real financial data, the project focuses on understanding mechanisms that produce market instability and volatility.
+	
+	\section{Background}
+	
+	Financial markets are complex systems where prices are determined by the actions of many independent participants. 
+	Traditional economic models often assume markets remain near equilibrium and that prices immediately reflect new information. 
+	However, real markets frequently display irregular behavior such as sudden crashes, large fluctuations, and periods of persistent volatility.
+	
+	Agent-based modeling provides an alternative approach. 
+	Instead of assuming perfect rationality, markets are modeled as collections of interacting traders who follow simple decision rules. 
+	Large-scale market behavior then emerges from these interactions rather than being imposed mathematically. 
+	LeBaron explains that financial markets are especially suitable for this method because prices both balance supply and demand and also carry information, meaning traders may react differently to the same price movement \cite{lebaron2006}. 
+	As a result, even simple trading rules can generate complicated market dynamics.
+	
+	Lux and Marchesi developed a multi-agent market model consisting of two main groups: fundamentalists and noise traders. 
+	Fundamentalists trade based on an estimated true value of the asset, buying when the price is below this value and selling when it is above. 
+	Noise traders instead follow trends and herd behavior. 
+	Their interactions produce realistic market properties such as heavy-tailed return distributions and clustered volatility even when external news is random \cite{lux1999}.
+	
+	These results suggest that important features of financial markets may arise from the interaction of heterogeneous traders rather than from external information alone. 
+	The proposed project builds a simplified version of this idea to study how trader behavior influences market stability and price fluctuations.
+	
+	\section{Model Description}
+	
+	The simulation represents a single stock traded by multiple agents.
+	Time advances in discrete steps.
+	At each time step, every trader decides whether to buy, sell, or hold the asset.
+	The stock price changes based on the imbalance between total buying and selling.
+	
+	\subsection{Trader Types}
+	
+	Three types of traders will be included:
+	
+	\textbf{Fundamentalists:}
+	These traders believe the asset has a true underlying value.
+	If the current price is below the fundamental value they buy, and if the price is above it they sell.
+	Their behavior stabilizes the market.
+	
+	\textbf{Trend Followers:}
+	These traders follow recent price movements.
+	If prices have been rising they buy, and if prices have been falling they sell.
+	Their behavior amplifies price movement and can generate bubbles and crashes.
+	
+	\textbf{Noise Traders:}
+	These traders act randomly.
+	They introduce unpredictability and ensure the market continues to operate even when other strategies agree.
+	
+	\subsection{Price Formation}
+	
+	After all traders act, the market calculates net demand:
+	\[
+	\text{Net Demand} = \text{Number of Buyers} - \text{Number of Sellers}
+	\]
+	
+	The price updates according to demand imbalance:
+	\[
+	P_{t+1} = P_t \cdot e^{(\lambda \cdot \text{Net Demand} + \epsilon)}
+	\]
+	where $\lambda$ controls price sensitivity and $\epsilon$ represents random noise.
+	
+	This approach allows prices to emerge from trader interactions rather than from an imposed prediction formula.
+	
+	\section{Experiments}
+	
+	The simulation will be used to run multiple controlled experiments.
+	The main objective is to observe how market behavior changes when model parameters vary.
+	
+	\subsection{Parameter Variations}
+	
+	The following parameters will be adjusted:
+	\begin{itemize}
+		\item Proportion of fundamentalists vs.\ trend followers
+		\item Market sensitivity (price impact factor $\lambda$)
+		\item Random noise level
+		\item Sudden external shocks
+	\end{itemize}
+	
+	\subsection{Measured Outputs}
+	
+	For each experiment the simulation will record:
+	\begin{itemize}
+		\item Price time series
+		\item Return distribution
+		\item Volatility over time
+		\item Frequency of large crashes
+	\end{itemize}
+	
+	Multiple runs will be performed for each parameter set to obtain statistically meaningful results.
+	
+	\section{Tools and Implementation}
+	
+	The simulation will be implemented in NetLogo, an environment designed for agent-based modeling.
+	Each trader will be represented as an agent with an assigned trading strategy.
+	
+	NetLogo's BehaviorSpace tool will be used to automatically run experiments across many parameter combinations and export results for analysis.
+	This allows the project to function as a computational experiment rather than a single demonstration. The model will also produce visual plots showing price evolution and volatility patterns, which will aid interpretation of results.
+	
+	\section{Expected Results}
+	
+	It is expected that different trader populations will produce different market behavior:
+	\begin{itemize}
+		\item Fundamentalists will stabilize prices
+		\item Trend followers will increase volatility and create bubbles
+		\item Mixed populations will produce more realistic market dynamics
+	\end{itemize}
+	
+	The simulation is expected to reproduce stylized market properties such as volatility clustering and heavy-tailed returns.
+	
+	\section{Timeline}
+	
+	\begin{itemize}
+		\item Week 1: Implement basic market and trader behaviors
+		\item Week 2: Implement price dynamics and visualization
+		\item Week 3: Conduct experiments using BehaviorSpace
+		\item Week 4: Analyze results and prepare final report
+	\end{itemize}
+	
+	\section{Conclusion}
+	
+	This project uses agent-based simulation to model a financial market where prices emerge from trader interactions.
+	The purpose is not to predict real stock prices but to understand how simple behavioral rules can generate complex financial behavior.
+	By varying trader composition and market parameters, the simulation will explore the mechanisms behind bubbles, crashes, and volatility patterns.
+	
+	\bibliographystyle{plain}
+	\bibliography{references}
+	
+\end{document}
