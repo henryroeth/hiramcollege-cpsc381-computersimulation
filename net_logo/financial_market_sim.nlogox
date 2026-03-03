@@ -109,16 +109,24 @@ to update-price
 end]]></code>
   <widgets>
     <view x="368" wrappingAllowedX="true" y="10" frameRate="30.0" minPycor="-16" height="434" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="true" width="434" tickCounterLabel="ticks" maxPycor="16" updateMode="0" maxPxcor="16" minPxcor="-16"></view>
-    <slider x="10" step="1" y="10" max="500" width="250" display="num-traders" height="50" min="10" direction="Horizontal" default="338.0" variable="num-traders"></slider>
+    <slider x="10" step="1" y="10" max="500" width="250" display="num-traders" height="50" min="10" direction="Horizontal" default="82.0" variable="num-traders"></slider>
     <button x="10" y="65" height="60" disableUntilTicks="false" forever="false" kind="Observer" width="70">setup</button>
     <button x="85" y="65" height="60" disableUntilTicks="false" forever="true" kind="Observer" width="70">go</button>
     <monitor x="160" precision="17" y="65" height="60" fontSize="11" width="100">price</monitor>
-    <plot x="10" autoPlotX="true" yMax="10.0" autoPlotY="true" y="130" xMin="0.0" height="180" legend="false" xMax="10.0" yMin="0.0" width="250" display="Price">
+    <plot x="10" autoPlotX="true" yMax="10.0" autoPlotY="true" yAxis="Price" y="130" xMin="0.0" height="180" legend="false" xMax="10.0" yMin="0.0" width="250" xAxis="Tick" display="Market Price Over Time">
       <setup></setup>
       <update></update>
       <pen interval="1.0" mode="0" display="default" color="-16777216" legend="true">
         <setup></setup>
         <update>plot price</update>
+      </pen>
+    </plot>
+    <plot x="10" autoPlotX="true" yMax="10.0" autoPlotY="true" yAxis="Net Demand" y="315" xMin="0.0" height="185" legend="false" xMax="10.0" yMin="0.0" width="250" xAxis="Tick" display="Net Demand Over Time">
+      <setup></setup>
+      <update></update>
+      <pen interval="1.0" mode="0" display="default" color="-16777216" legend="true">
+        <setup></setup>
+        <update>plot net-demand</update>
       </pen>
     </plot>
   </widgets>
