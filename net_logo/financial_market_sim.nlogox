@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <model version="NetLogo 7.0.3" snapToGrid="true">
-  <code>; Agent-Based Simulation of a Financial Market
+  <code><![CDATA[; Agent-Based Simulation of a Financial Market
 ; Henry Roeth
 ; Hiram College
 ; CPSC 381: Computer Simulation
@@ -24,9 +24,6 @@ to setup
   ; Reset the sim
   clear-all
   
-  ; Set the initial price
-  set price 100
-  
   ; Create the turtles ("num-traders" comes from what user sets slider to)
   create-turtles num-traders [
     ; Set each turtle (trader) location to random x and y position
@@ -34,6 +31,9 @@ to setup
     
     ; Set initial trader action to 'hold'
     set action 0
+    
+    ; Set the initial price
+    set price 100
     
     ; Generates random int (0, 1, 2) for random trader type
     let rand-int random 3
@@ -59,11 +59,68 @@ to setup
   
   ; Reset the ticks
   reset-ticks
-end</code>
+end
+
+; Main loop
+to go
+  ask turtles [
+    decide
+  ]
+  compute-demand
+  update-price
+  
+  tick
+end
+
+; Function to decide what action to take
+to decide
+  ; Fundamentalist
+  if trader-type = "fundamentalist" [
+    ; Buy if price low, sell if high
+    if price < 100 [ set action 1 ]
+    if price > 100 [ set action -1 ]
+  ]
+  
+  ; Trend follower
+  if trader-type = "trend-follower" [
+    ; Random trend
+    if random 2 = 0 [ set action 1 ]
+    if random 2 = 1 [ set action -1 ]
+  ]
+  
+  ; Noise trader
+  if trader-type = "noise-trader" [
+    ; Completely random
+    set action one-of [-1 0 1]
+  ]
+end
+
+to compute-demand
+  set buyers count turtles with [action = 1]
+  set sellers count turtles with [action = -1]
+  set net-demand buyers - sellers
+end
+
+to update-price
+  set price price + (0.1 * net-demand)
+  if price < 1 [
+    set price 1
+  ]
+end]]></code>
   <widgets>
     <view x="368" wrappingAllowedX="true" y="10" frameRate="30.0" minPycor="-16" height="434" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="true" width="434" tickCounterLabel="ticks" maxPycor="16" updateMode="0" maxPxcor="16" minPxcor="-16"></view>
-    <slider x="10" step="1" y="10" max="500" width="250" display="num-traders" height="50" min="10" direction="Horizontal" default="266.0" variable="num-traders"></slider>
-    <button x="10" y="70" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="55">setup</button>
+    <slider x="10" step="1" y="10" max="500" width="250" display="num-traders" height="50" min="10" direction="Horizontal" default="338.0" variable="num-traders"></slider>
+    <button x="10" y="65" height="60" disableUntilTicks="false" forever="false" kind="Observer" width="70">setup</button>
+    <button x="85" y="65" height="60" disableUntilTicks="false" forever="true" kind="Observer" width="70">go</button>
+    <monitor x="160" precision="17" y="65" height="60" fontSize="11" width="100">price</monitor>
+    <plot x="10" autoPlotX="true" yMax="10.0" autoPlotY="true" y="130" xMin="0.0" height="180" legend="false" xMax="10.0" yMin="0.0" width="250" display="Price">
+      <setup></setup>
+      <update></update>
+      <pen interval="1.0" mode="0" display="default" color="-16777216" legend="true">
+        <setup></setup>
+        <update>plot price</update>
+      </pen>
+    </plot>
   </widgets>
   <info>## WHAT IS IT?
 
